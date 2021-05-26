@@ -148,7 +148,8 @@ static int honda_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     if ( !(unsafe_mode & UNSAFE_DISABLE_STOCK_AEB) ) {
       if ((bus == 2) && (addr == 0x1FA)) {
         bool honda_stock_aeb = GET_BYTE(to_push, 3) & 0x20;
-	if is_alt_nidec_brake = honda_alt_brake_msg {
+	int is_alt_nidec_brake = nidec_alt_brake_msg;
+	if (is_alt_nidec_brake) {
           int honda_stock_brake = (GET_BYTE(to_push, 6) << 2) + ((GET_BYTE(to_push, 7) >> 6) & 0x3);
 	} else {
 	  int honda_stock_brake = (GET_BYTE(to_push, 0) << 2) + ((GET_BYTE(to_push, 1) >> 6) & 0x3);
@@ -220,7 +221,8 @@ static int honda_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
   // BRAKE: safety check (nidec)
   if ((addr == 0x1FA) && (bus == bus_pt)) {
-    if is_alt_nidec_brake = honda_alt_brake_msg {
+    int is_alt_nidec_brake = nidec_alt_brake_msg;
+    if (is_alt_nidec_brake) {
       honda_brake = (GET_BYTE(to_send, 6) << 2) + ((GET_BYTE(to_send, 7) >> 6) & 0x3);
     } else {
       honda_brake = (GET_BYTE(to_send, 0) << 2) + ((GET_BYTE(to_send, 1) >> 6) & 0x3);
