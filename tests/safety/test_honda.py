@@ -194,9 +194,9 @@ class TestHondaNidecSafety(TestHondaSafety, common.InterceptorSafetyTest):
   INTERCEPTOR_THRESHOLD = 344
 
   def setUp(self):
-    self.packer = CANPackerPanda("honda_civic_touring_2016_can_generated")
+    self.packer = CANPackerPanda("honda_clarity_hybrid_2018_can_generated")
     self.safety = libpandasafety_py.libpandasafety
-    self.safety.set_safety_hooks(Panda.SAFETY_HONDA_NIDEC, 0)
+    self.safety.set_safety_hooks(Panda.SAFETY_HONDA_NIDEC, 1)
     self.safety.init_tests_honda()
 
   # Honda gas gains are the different
@@ -286,7 +286,7 @@ class TestHondaBoschSafety(TestHondaSafety):
 
   # TODO: add back in once alternative brake checksum/counter validation is added
   # def test_alt_brake_rx_hook(self):
-  #   self.safety.set_honda_alt_brake_msg(1)
+  #   self.safety.set_bosch_alt_brake_msg(1)
   #   self.safety.set_controls_allowed(1)
   #   to_push = self._alt_brake_msg(0)
   #   self.assertTrue(self._rx(to_push))
@@ -294,12 +294,12 @@ class TestHondaBoschSafety(TestHondaSafety):
   #   self.assertFalse(self._rx(to_push))
   #   self.assertFalse(self.safety.get_controls_allowed())
   def test_alt_disengage_on_brake(self):
-    self.safety.set_honda_alt_brake_msg(1)
+    self.safety.set_bosch_alt_brake_msg(1)
     self.safety.set_controls_allowed(1)
     self._rx(self._alt_brake_msg(1))
     self.assertFalse(self.safety.get_controls_allowed())
 
-    self.safety.set_honda_alt_brake_msg(0)
+    self.safety.set_bosch_alt_brake_msg(0)
     self.safety.set_controls_allowed(1)
     self._rx(self._alt_brake_msg(1))
     self.assertTrue(self.safety.get_controls_allowed())
