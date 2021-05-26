@@ -194,7 +194,7 @@ class TestHondaNidecSafety(TestHondaSafety, common.InterceptorSafetyTest):
   INTERCEPTOR_THRESHOLD = 344
 
   def setUp(self):
-    self.packer = CANPackerPanda("honda_civic_touring_2016_can_generated")
+    self.packer = CANPackerPanda("honda_clarity_hybrid_2018_can_generated")
     self.safety = libpandasafety_py.libpandasafety
     self.safety.set_safety_hooks(Panda.SAFETY_HONDA_NIDEC, 0)
     self.safety.init_tests_honda()
