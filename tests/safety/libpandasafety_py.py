@@ -66,7 +66,8 @@ void init_tests(void);
 
 void init_tests_honda(void);
 void set_honda_fwd_brake(bool);
-void set_honda_alt_brake_msg(bool);
+void set_nidec_alt_brake_msg(bool);
+void set_bosch_alt_brake_msg(bool);
 void set_honda_bosch_long(bool c);
 int get_honda_hw(void);
 

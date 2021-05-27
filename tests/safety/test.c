@@ -179,9 +179,11 @@ void set_desired_torque_last(int t){
 void set_desired_angle_last(int t){
   desired_angle_last = t;
 }
-
-void set_honda_alt_brake_msg(bool c){
-  honda_alt_brake_msg = c;
+void set_nidec_alt_brake_msg(bool c){
+  nidec_alt_brake_msg = c;
+}
+void set_bosch_alt_brake_msg(bool c){
+  bosch_alt_brake_msg = c;
 }
 
 void set_honda_bosch_long(bool c){
