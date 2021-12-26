@@ -244,6 +244,7 @@ static int honda_tx_hook(CANPacket_t *to_send) {
   }
   bool current_controls_allowed = controls_allowed && !(pedal_pressed);
   int bus_pt = (honda_hw == HONDA_BOSCH) ? 1 : 0;
+  int bus_acc_cancel = (honda_hw == HONDA_BOSCH) ? 1 : 2;
 
   // BRAKE: safety check (nidec)
   if ((addr == 0x1FA) && (bus == bus_pt)) {
@@ -312,10 +313,10 @@ static int honda_tx_hook(CANPacket_t *to_send) {
     }
   }
 
-  // FORCE CANCEL: safety check only relevant when spamming the cancel button in Bosch HW
+  // FORCE CANCEL: safety check when spamming the cancel button to the stock ACC
   // ensuring that only the cancel button press is sent (VAL 2) when controls are off.
   // This avoids unintended engagements while still allowing resume spam
-  if ((addr == 0x296) && !current_controls_allowed && (bus == bus_pt)) {
+  if ((addr == 0x296) && !current_controls_allowed && (bus == bus_acc_cancel)) {
     if (((GET_BYTE(to_send, 0) >> 5) & 0x7U) != 2U) {
       tx = 0;
     }
