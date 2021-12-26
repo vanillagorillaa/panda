@@ -20,6 +20,7 @@ class TestHondaSafetyBase(common.PandaSafetyTest):
   MAX_BRAKE: float = 255
   PT_BUS: Optional[int] = None  # must be set when inherited
   STEER_BUS: Optional[int] = None  # must be set when inherited
+  CANCEL_BUS: Optional[int] = None  # must be set when inherited
 
   STANDSTILL_THRESHOLD = 0
   RELAY_MALFUNCTION_ADDR = 0xE4
@@ -65,7 +66,7 @@ class TestHondaSafetyBase(common.PandaSafetyTest):
   def _button_msg(self, buttons, main_on=False):
     values = {"CRUISE_BUTTONS": buttons, "COUNTER": self.cnt_button % 4}
     self.__class__.cnt_button += 1
-    return self.packer.make_can_msg_panda("SCM_BUTTONS", self.PT_BUS, values)
+    return self.packer.make_can_msg_panda("SCM_BUTTONS", self.CANCEL_BUS, values)
 
   def _brake_msg(self, brake):
     values = {"BRAKE_PRESSED": brake, "COUNTER": self.cnt_gas % 4}
@@ -213,6 +214,7 @@ class TestHondaNidecSafety(TestHondaSafetyBase, common.InterceptorSafetyTest):
 
   PT_BUS = 0
   STEER_BUS = 0
+  CANCEL_BUS = 0
 
   INTERCEPTOR_THRESHOLD = 344
 
@@ -301,12 +303,13 @@ class TestHondaNidecAltSafety(TestHondaNidecSafety, common.InterceptorSafetyTest
   def _button_msg(self, buttons, main_on=False):
     values = {"CRUISE_BUTTONS": buttons, "MAIN_ON": main_on, "COUNTER": self.cnt_button % 4}
     self.__class__.cnt_button += 1
-    return self.packer.make_can_msg_panda("SCM_BUTTONS", self.PT_BUS, values)
+    return self.packer.make_can_msg_panda("SCM_BUTTONS", self.CANCEL_BUS, values)
 
 
 class TestHondaBoschSafetyBase(TestHondaSafetyBase):
   PT_BUS = 1
   STEER_BUS = 0
+  CANCEL_BUS = 1
 
   TX_MSGS = [[0xE4, 0], [0xE5, 0], [0x296, 1], [0x33D, 0], [0x33DA, 0], [0x33DB, 0]]
   FWD_BLACKLISTED_ADDRS = {2: [0xE4, 0xE5, 0x33D, 0x33DA, 0x33DB]}
@@ -421,8 +424,9 @@ class TestHondaBoschLongSafety(TestHondaBoschSafetyBase):
 class TestHondaRadarlessSafetyBase(TestHondaSafetyBase):
   PT_BUS = 0
   STEER_BUS = 0
+  CANCEL_BUS = 2
 
-  TX_MSGS = [[0xE4, 0], [0x296, 0], [0x33D, 0]]
+  TX_MSGS = [[0xE4, 0], [0x296, 2], [0x33D, 0]]
   FWD_BLACKLISTED_ADDRS = {2: [0xE4, 0x33D]}
 
   @classmethod
