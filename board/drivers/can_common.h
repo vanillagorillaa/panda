@@ -210,8 +210,8 @@ void ignition_can_hook(CANPacket_t *to_push) {
 
     // Honda OBDII exception
     // TODO: Find a better message
-    if ((addr == 0x454) && (len == 8)) {
-      ignition_can = (GET_BYTE(to_push, 6) & (1U << 5)) != 0U;
+    if ((addr == 0x309) && (len == 8)) {
+      ignition_can = (GET_BYTE(to_push, 7) & (1U << 7)) != 0U;
       ignition_can_cnt = 0U;
     }
   }
